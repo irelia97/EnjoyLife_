@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:padding="10dp">
+    
+    <ImageView
+        android:src="@drawable/login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/login_username"
+        android:hint="@string/user_name"
+        android:digits="0123456789qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM"
+        android:inputType="text"
+        android:maxLines="1"
+        android:maxLength="16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/login_password"
+        android:hint="@string/pass_word"
+        android:inputType="textPassword"
+        android:maxLines="1"
+        android:maxLength="16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    
+    <LinearLayout
+        android:layout_marginRight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        
+        <CheckBox
+            android:id="@+id/remember_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="@string/remember"
+            android:textColor="@color/colorPrimary"/>
+        
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/bt_login"
+        android:layout_marginTop="10dp"
+        android:text="@string/login"
+        android:background="@drawable/button_background"
+        android:textColor="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/bt_register"
+        android:layout_marginTop="10dp"
+        android:text="@string/register"
+        android:background="@drawable/button_background"
+        android:textColor="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_forget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="@string/forget"
+            android:textColor="@color/colorPrimary"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,70 @@
+<resources>
+    <string name="app_name">欢乐时光</string>
+    <string name="server_manager">服务管家</string>
+    <string name="weixin_article">微信精选</string>
+    <string name="beauty_graph">美女图片</string>
+    <string name="person_info">个人中心</string>
+    <string name="setting">设置</string>
+    <string name="guide_view">引导页</string>
+    <string name="enter_main">进入主页</string>
+
+    <string name="user_name">用户名</string>
+    <string name="pass_word">密码</string>
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+    <string name="remember">记住密码</string>
+    <string name="forget">忘记密码</string>
+    <string name="confirm">确认密码</string>
+    <string name="age">年龄</string>
+    <string name="age_18">18</string>
+    <string name="description">简介</string>
+    <string name="boy">男</string>
+    <string name="girl">女</string>
+    <string name="email">邮箱</string>
+    <string name="telephone">手机</string>
+    <string name="textnull">输入框不能为空！</string>
+    <string name="user_null_error">用户名不能为空或过短！</string>
+    <string name="abnormal_age">年龄不在正常范围内！</string>
+    <string name="simple_password">密码为空或过于简单(不能全为数字或字母)！</string>
+    <string name="differ_password">密码为空或两次密码输入不一致！</string>
+    <string name="error_email">邮箱格式不正确！</string>
+    <string name="error_tel">手机格式不正确！</string>
+    <string name="default_Desc">这个人很高冷，什么都不想说</string>
+
+    <string name="login_failed">登录失败！</string>
+    <string name="now_loading">正在登录...</string>
+
+    <string name="modify_password">修改密码</string>
+    <string name="reset_password">重置密码</string>
+    <string name="use_old_password">使用旧密码重置</string>
+    <string name="confrim_modify">确认修改</string>
+    <string name="use_email">使用邮箱重置</string>
+    <string name="email_unverified">邮箱尚未验证！请前往邮箱进行验证！</string>
+    <string name="old_password">旧密码</string>
+    <string name="new_password">新密码</string>
+    <string name="send_email">发送邮件</string>
+    <string name="old_new_equals">新密码不能和旧密码相同！</string>
+    <string name="only_email">从登录界面只能通过邮件找回密码！</string>
+
+    <string name="edit_info">编辑信息</string>
+    <string name="name">姓名</string>
+    <string name="nickname">昵称</string>
+    <string name="nameless">无名氏</string>
+    <string name="gender">性别</string>
+    <string name="error_gender">性别请设置为男或女！否则默认你是人妖哦~</string>
+    <string name="ladyboy">人妖</string>
+    <string name="express">快递查询</string>
+    <string name="express_company">快递公司</string>
+    <string name="express_sno">快递单号</string>
+    <string name="search">查询</string>
+    <string name="telpostion">归属地查询</string>
+    <string name="confirm_modify">确认修改</string>
+    <string name="success_modify">修改成功</string>
+    <string name="error_modify">修改失败</string>
+    <string name="exit_login">退出登录</string>
+
+    <string name="take_photo">拍照</string>
+    <string name="select_photo">选择图片</string>
+    <string name="cancel">取消</string>
+
+</resources>

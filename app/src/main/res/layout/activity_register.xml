@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:src="@drawable/register"
+        android:background="#ffffffff"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <EditText
+            android:layout_marginTop="75dp"
+            android:inputType="text"
+            android:digits="0123456789qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM"
+            android:hint="@string/user_name"
+            android:maxLines="1"
+            android:maxLength="16"
+            android:id="@+id/edit_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:hint="@string/pass_word"
+            android:maxLines="1"
+            android:maxLength="16"
+            android:inputType="textPassword"
+            android:id="@+id/edit_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:hint="@string/confirm"
+            android:maxLines="1"
+            android:maxLength="16"
+            android:inputType="textPassword"
+            android:id="@+id/edit_confirm_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <RadioGroup
+            android:id="@+id/mRadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:text="@string/boy"
+                android:id="@+id/rb_boy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"/>
+            <RadioButton
+                android:text="@string/girl"
+                android:id="@+id/rb_girl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false" />
+        </RadioGroup>
+
+        <EditText
+            android:hint="@string/age"
+            android:maxLines="1"
+            android:maxLength="3"
+            android:inputType="number"
+            android:id="@+id/edit_age"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:hint="@string/description"
+            android:id="@+id/edit_description"
+            android:inputType="text"
+            android:maxLines="2"
+            android:maxLength="64"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:hint="@string/email"
+            android:maxLines="1"
+            android:inputType="textEmailAddress"
+            android:id="@+id/edit_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:inputType="number"
+            android:hint="@string/telephone"
+            android:maxLines="1"
+            android:maxLength="11"
+            android:id="@+id/edit_tel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:layout_marginTop="10dp"
+            android:text="@string/register"
+            android:textColor="@android:color/white"
+            android:background="@drawable/button_background"
+            android:id="@+id/bt_registered"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

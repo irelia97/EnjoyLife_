@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spinner">
+        <item>顺丰</item>
+        <item>圆通</item>
+        <item>中通</item>
+        <item>韵达</item>
+        <item>申通</item>
+        <item>天天</item>
+        <item>全峰</item>
+        <item>EMS</item>
+    </string-array>
+</resources>

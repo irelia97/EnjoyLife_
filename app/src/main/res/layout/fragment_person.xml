@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!--编辑图片+按钮-->
+        <LinearLayout
+            android:background="@drawable/person1"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:src="@drawable/add_img"
+                app:civ_border_width="2dp"
+                app:civ_border_color="@color/colorPrimary"/>
+
+            <TextView
+                android:id="@+id/et_info"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/button_background"
+                android:gravity="center"
+                android:text="@string/edit_info"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"/>
+
+        </LinearLayout>
+
+        <!--姓名属性-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nickname"
+                android:textSize="20dp"/>
+            
+            <EditText
+                android:inputType="text"
+                android:maxLines="1"
+                android:maxLength="16"
+                android:textColor="@color/colorPrimary"
+                android:id="@+id/et_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            
+        </LinearLayout>
+
+        <!--性别属性-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/gender"
+                android:textSize="20dp"/>
+
+            <EditText
+                android:inputType="text"
+                android:maxLines="1"
+                android:maxLength="2"
+                android:textColor="@color/colorPrimary"
+                android:id="@+id/et_gender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <!--年龄属性-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/age"
+                android:textSize="20dp"/>
+
+            <EditText
+                android:textColor="@color/colorPrimary"
+                android:id="@+id/et_age"
+                android:maxLines="1"
+                android:maxLength="3"
+                android:inputType="number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <!--简介属性-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/description"
+                android:textSize="20dp"/>
+
+            <EditText
+                android:textColor="@color/colorPrimary"
+                android:id="@+id/et_desc"
+                android:inputType="text"
+                android:maxLines="2"
+                android:maxLength="64"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/tv_courier"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/express"
+                android:textSize="20dp"/>
+
+            <!--<TextView-->
+                <!--android:textColor="@color/colorPrimary"-->
+                <!--android:layout_marginLeft="175dp"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/telpostion"-->
+                <!--android:textSize="20dp"/>-->
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+
+        </LinearLayout>
+
+        <!--忘记密码-->
+        <LinearLayout
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_forget"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="@string/forget"
+                android:textColor="@color/colorPrimary"/>
+
+        </LinearLayout>
+
+        <!--确认修改按钮-->
+        <Button
+            android:id="@+id/bt_confirm_modify"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_background"
+            android:text="@string/confirm_modify"
+            android:textColor="@android:color/white"/>
+
+        <!--退出登录按钮-->
+        <Button
+            android:id="@+id/bt_exit_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_background"
+            android:text="@string/exit_login"
+            android:textColor="@android:color/white"/>
+
+    </LinearLayout>
+
+</ScrollView>
