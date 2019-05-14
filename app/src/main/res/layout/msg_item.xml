@@ -14,7 +14,6 @@
         android:layout_gravity="left"
         android:background="@drawable/message_left">
 
-        <!--这里头像和文本一直重合在一起，很烦-->
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/touxiang"
             android:layout_width="50dp"

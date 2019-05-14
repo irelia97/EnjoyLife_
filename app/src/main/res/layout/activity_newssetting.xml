@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:hint="@string/inputKeyWord"
+            android:id="@+id/et_inputInfo" />
+        <Button
+            android:id="@+id/bt_confirm"
+            android:text="@string/confrim_modify"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+
+    <TextView
+        android:hint="@string/news_type"
+        android:id="@+id/tv_newsType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Spinner
+        android:id="@+id/sp_newsType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/newsType_spinner"
+        android:background="@drawable/courier_background">
+
+    </Spinner>
+
+
+</LinearLayout>

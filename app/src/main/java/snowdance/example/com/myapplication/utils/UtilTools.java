@@ -43,17 +43,11 @@ public class UtilTools {
 
     //  正则判断手机号码
     public static boolean isMobileNO(String mobiles) {
+        if (null==mobiles || mobiles.isEmpty() ) return false;
         Pattern p = Pattern.compile("^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$");
         Matcher m = p.matcher(mobiles);
         return m.matches();
     }
-
-    //  正则判断邮编
-    public static boolean isZip(String zipString){
-        String str = "^[1-9][0-9]{5}$";
-        return Pattern.compile(str).matcher(zipString).matches();
-    }
-
     //  正则判断邮箱
     public static boolean isEmail(String email){
         if (null==email || email.isEmpty() ) return false;
@@ -94,7 +88,7 @@ public class UtilTools {
     }
 
     //  将剪裁的头像存储至ShareUtils中
-    public static void putImageToShare(Context context, Bitmap bitmap){
+    public static void putImageToShare(Context context, Bitmap bitmap, String tel){
         if( bitmap != null ){
             //  Bitmap压缩成字节数组byte[]输出流
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -103,7 +97,7 @@ public class UtilTools {
             byte[] byteArr = outputStream.toByteArray();
             String imgString = new String(Base64.encodeToString(byteArr, Base64.DEFAULT));
             //  String保存至ShareUtil
-            SharedUtils.putString(context, "image_title", imgString);
+            SharedUtils.putString(context, tel, imgString);
             MLog.d("头像存储至ShareUtil成功！");
         }else{
             MLog.d("头像存储至ShareUtil失败，bitmap == null！");
@@ -112,9 +106,9 @@ public class UtilTools {
 
     //  将ShareUtils头像设置
     //  String -> Byte[] -> bitmap
-    public static void setImageFromShare(Context context, ImageView imageView){
-        String imgString = SharedUtils.getString(context, "image_title", "");
-        if( !UtilTools.isEquals(imgString, "") ){
+    public static void setImageFromShare(Context context, ImageView imageView, String tel){
+        String imgString = SharedUtils.getString(context, tel, "");
+        if( !UtilTools.isEquals(imgString, "") && imgString!=null ){
             //  String -> byte[]
             byte[] byteArr = Base64.decode(imgString, Base64.DEFAULT);
             ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArr);

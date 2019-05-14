@@ -17,7 +17,7 @@
         android:padding="10dp">
 
         <EditText
-            android:layout_marginTop="75dp"
+            android:layout_marginTop="85dp"
             android:inputType="text"
             android:digits="0123456789qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM"
             android:hint="@string/user_name"

@@ -11,6 +11,7 @@ import java.util.List;
 
 import snowdance.example.com.myapplication.R;
 import snowdance.example.com.myapplication.entity.Message;
+import snowdance.example.com.myapplication.utils.UtilTools;
 
 //  聊天信息
 public class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHolder> {

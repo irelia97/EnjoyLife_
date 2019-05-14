@@ -2,6 +2,7 @@ package snowdance.example.com.myapplication.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.widget.ListView;
 
 import com.kymjs.rxvolley.RxVolley;
 import com.kymjs.rxvolley.client.HttpCallback;
+import com.show.api.ShowApiRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,6 +25,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import snowdance.example.com.myapplication.R;
 import snowdance.example.com.myapplication.activities.WebViewAct;
@@ -49,9 +56,11 @@ public class WechatFragment extends Fragment {
     //  容器存储拿到的标题、URL
     private List<String> mListTitle = new ArrayList<>();
     private List<String> mListUrl = new ArrayList<>();
-    private static int pno = 1;
+    private List<String> mListImg = new ArrayList<>();
+    private int ps = 15;
     private int preState = 0;
     private boolean tag = false;
+    private static int mPosition = 0;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -61,20 +70,25 @@ public class WechatFragment extends Fragment {
         return view;
     }
 
-    //  http://v.juhe.cn/weixin/query?key=您申请的KEY
-    private void initView(View view) {
+    private void initView(View view){
         mListView = view.findViewById(R.id.mListView);
-        String url = "http://v.juhe.cn/weixin/query?key=" + StaticClass.WEIXIN_APPKEY
-                + "&ps=15&pno=" + pno;
-        pno++;
-        RxVolley.get(url, new HttpCallback() {
-            @Override
-            public void onSuccess(String t) {
-                UtilTools.showSth(getActivity(), "微信接口返回成功！");
-                parseJson(t);
-            }
-        });
-        UtilTools.showSth(getContext(), "Tips:微信文章下滑再上拉可刷新");
+//        String url = "http://v.juhe.cn/weixin/query?key=" + StaticClass.WEIXIN_APPKEY
+//                + "&ps=20&pno=" + pno;
+
+        setData();
+//        MLog.longLog("mList.size() = " + mList.size());
+//        MLog.longLog("mListUrl.size() = " + mListUrl.size());
+//        MLog.longLog("mListTitle.size() = " + mListTitle.size());
+//        MLog.longLog("mListImg.size() = " + mListImg.size());
+
+//        pno++;
+//        RxVolley.get(url, new HttpCallback() {
+//            @Override
+//            public void onSuccess(String t) {
+////                UtilTools.showSth(getActivity(), "微信接口返回成功！");
+////                parseJson(t);
+//            }
+//        });
 
         //  点击事件，跳转至微信文章
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -86,6 +100,7 @@ public class WechatFragment extends Fragment {
                 //  因为我将mList逆置了，故这里位置需要修改
                 intent.putExtra("title", mListTitle.get(mListTitle.size()-1-position));
                 intent.putExtra("url", mListUrl.get(mListUrl.size()-1-position));
+//                intent.putExtra("img", mListImg.get(mListImg.size()-1-position));
                 //  跳转
                 startActivity(intent);
             }
@@ -112,7 +127,6 @@ public class WechatFragment extends Fragment {
                 } else{
                     tag = false;
                 }
-
 //                if( firstVisibleItem > oldVisibleItem ){
 //                    //  上滑
 //                }else if( firstVisibleItem < oldVisibleItem ){
@@ -124,53 +138,143 @@ public class WechatFragment extends Fragment {
 
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if( scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE){
+                    mPosition = mListView.getFirstVisiblePosition();
+                }
+
                 if( tag && preState==SCROLL_STATE_FLING && scrollState==SCROLL_STATE_IDLE ){
                     //  接口解析
-                    //  ps=10表示一页显示15篇文章，pno为页数
-                    String url = "http://v.juhe.cn/weixin/query?key=" + StaticClass.WEIXIN_APPKEY
-                            + "&ps=15&pno=" + pno;
-                    MLog.d("pno = " + pno);
-                    RxVolley.get(url, new HttpCallback() {
-                        @Override
-                        public void onSuccess(String t) {
-                            parseJson(t);
-                        }
-                    });
+                    //  ps=5表示一页显示5篇文章，pno为页数
+
+//                    String url = "http://v.juhe.cn/weixin/query?key=" + StaticClass.WEIXIN_APPKEY
+//                            + "&ps=5&pno=" + pno;
+                    setData();
+//                    MLog.longLog("mList.size() = " + mList.size());
+//                    MLog.longLog("mListUrl.size() = " + mListUrl.size());
+//                    MLog.longLog("mListTitle.size() = " + mListTitle.size());
+//                    MLog.longLog("mListImg.size() = " + mListImg.size());
+
+                    MLog.d("pno = " + StaticClass.NEWS_PNO);
+//                    RxVolley.get(url, new HttpCallback() {
+//                        @Override
+//                        public void onSuccess(String t) {
+//                            parseJson(t);
+//                        }
+//                    });
                     //  下一次滑动加载下一页
-                    pno++;
-                    UtilTools.showSth(getContext(), "已为您新加载15篇精选文章！上滑可刷新！");
+//                    pno++;
+                    UtilTools.showSth(getContext(), "已为您新加载" + ps + "篇精选文章！");
+
+
                 }
                 preState = scrollState;
             }
         });
     }
 
+    private void setData()
+    {
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        MyThread callable = new MyThread();
+        Future<String> future = executorService.submit(callable);
+
+        String JSON = "";
+        while( true ){
+            if( future.isDone() ){
+                try{
+                    JSON = future.get().toString();
+                    MLog.longLog("文章数据：" + JSON);
+                    executorService.shutdown();
+                    break;
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        parseJson(JSON);
+    }
+
+    private String getJson()
+    {
+        String res = new ShowApiRequest(StaticClass.YIYUAN_NEWS, StaticClass.YIYUAN_APPID,
+                StaticClass.YIYUAN_KEY)
+                .addTextPara("channelName", StaticClass.NEWS_TYPE)
+                .addTextPara("title", StaticClass.NEWS_TITLE)
+                .addTextPara("needHtml", "1")
+                .addTextPara("page", StaticClass.NEWS_PNO+"")
+                .addTextPara("maxResult", ps+"")
+                .post();
+        ++StaticClass.NEWS_PNO;
+
+        return res;
+    }
+
     private void parseJson(String JSON){
         try {
-            JSONObject jsonObj = new JSONObject(JSON);
-            JSONObject jsonRes = jsonObj.getJSONObject("result");
-            JSONArray jsonList = jsonRes.getJSONArray("list");
-
             if( mList.size() >= 100 ){
                 mList.clear();
                 mListUrl.clear();
                 mListTitle.clear();
             }
-            for(int i = 0; i < jsonList.length(); ++i){
-                JSONObject json = (JSONObject) jsonList.get(i);
-                WeChatData data = new WeChatData();
 
+            JSONObject jsonObj = new JSONObject(JSON);
+            JSONObject jsonRes = jsonObj.getJSONObject("showapi_res_body").getJSONObject("pagebean");
+            JSONArray jsonList = jsonRes.getJSONArray("contentlist");
+
+            MLog.d("文章List有" + jsonList.length() + "条数据");
+            MLog.d("MaxResult = " + jsonRes.getString("maxResult"));
+            if( jsonList.length() == 0 ){
+                UtilTools.showSth(getContext(), "无此类型数据！");
+                return;
+            }
+
+            /* 聚合数据网已经停止更新，故选择易源数据网接口 */
+            for(int i = 0; i < jsonList.length(); ++i)
+            {
+                JSONObject json = (JSONObject) jsonList.get(i);
+                final WeChatData data = new WeChatData();
+                //  URL显示不正常，原因未知
+                //  折中解决方案是使用webview去加载html数据
+                mListUrl.add(json.getString("html"));
+                MLog.longLog("url = " + json.getString("link"));
+                //  标题
                 String title = json.getString("title");
                 data.setTitle(title);
                 mListTitle.add(title);
-
-                String url = json.getString("url");
-                mListUrl.add(url);
-
+                MLog.longLog("title = " + title);
+                //  来源
                 data.setSource(json.getString("source"));
-                data.setImgUrl(json.getString("firstImg"));
+                MLog.longLog("source = " + json.getString("source"));
+                //  预览图(可能不存在)
+                String imgUrl = "";
+                MLog.d("111111111111111111111111111111111111");
+
+                MLog.d("22222222222222222222222222222222");
+                if( json.has("imageurls") ){
+                    MLog.d("3333333333333333333333333333333333333333");
+                    JSONArray imgList = json.getJSONArray("imageurls");
+                    MLog.d("4444444444444444444444444444444444444444");
+                    if( imgList.length() != 0 ){
+                        imgUrl =  ((JSONObject)imgList.get(0)).getString("url");
+                        MLog.d("5555555555555555555555555555555555555555");
+                    }else{
+                        MLog.d("No imgUrl!");
+                        imgUrl = StaticClass.NEWS_NULL_PHOtO[StaticClass.NULL_PHOTO_NO];
+                        StaticClass.NULL_PHOTO_NO = (StaticClass.NULL_PHOTO_NO + 1) % 10;
+                    }
+                }
+                data.setImgUrl(imgUrl);
+                mListImg.add(imgUrl);
+                MLog.longLog("imgUrl = " + imgUrl);
+
                 mList.add(data);
             }
+//            MLog.d("---------MListUrl------------");
+//            for(int i = 0; i < mListUrl.size(); ++i){
+//                MLog.longLog("URL" + (i+1) + ": " + mListUrl.get(i));
+//            }
+
+
             //  临时容器逆置，为了新添加的数据在前面显示，这样需要注意URL和position问题
             //  如果使用插入的话效率可能会低些
             List<WeChatData> tmp = new ArrayList<>();
@@ -179,10 +283,28 @@ public class WechatFragment extends Fragment {
 
             WeChatAdapter adapter = new WeChatAdapter(getActivity(), tmp);
             mListView.setAdapter(adapter);
+//            mListView.setSelection(adapter.getCount()-1);
+//            mListView.setSelection(5);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
     }
-}
 
+    public void changeNewsType()
+    {
+        MLog.d("WechatFragment changeImggeType()");
+        if( StaticClass.NEWS_TYPE_CHANGE ){
+            StaticClass.NEWS_TYPE_CHANGE = false;
+            StaticClass.NEWS_PNO = 1;  //重新变为第一页
+            setData();
+        }
+    }
+
+    public class MyThread implements Callable<String>{
+        @Override
+        public String call() {
+            return getJson();
+        }
+    }
+}

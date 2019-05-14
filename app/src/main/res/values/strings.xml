@@ -1,15 +1,15 @@
 <resources>
     <string name="app_name">欢乐时光</string>
     <string name="server_manager">服务管家</string>
-    <string name="weixin_article">微信精选</string>
-    <string name="beauty_graph">美女图片</string>
+    <string name="weixin_article">新闻精选</string>
+    <string name="beauty_graph">图片欣赏</string>
     <string name="person_info">个人中心</string>
     <string name="setting">设置</string>
     <string name="guide_view">引导页</string>
     <string name="enter_main">进入主页</string>
 
     <string name="user_name">用户名</string>
-    <string name="pass_word">密码</string>
+    <string name="pass_word">密码*</string>
     <string name="login">登录</string>
     <string name="register">注册</string>
     <string name="remember">记住密码</string>
@@ -66,5 +66,18 @@
     <string name="take_photo">拍照</string>
     <string name="select_photo">选择图片</string>
     <string name="cancel">取消</string>
+    <string name="send">发送</string>
+    <string name="inputKeyWord">输入关键字</string>
+    <string name="save_picture">保存图片</string>
+
+    <string name="article_setting">文章设置</string>
+    <string name="photo_setting">图片设置</string>
+    <string name="else_setting">其它设置</string>
+    <string name="news_type">新闻种类</string>
+    
+    <string name="xunfei_TTS">语音播报</string>
+    <string name="xunfei_info">开启之后普通对话将会启用人工语音</string>
+    <string name="message_show">智能短信提醒</string>
+    <string name="message_info">开启之后收到短信将会弹窗提醒</string>
 
 </resources>

@@ -5,34 +5,26 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="10dp">
-<!--
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:text="快递公司"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
 
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinner"
-            android:entries="@array/spinner"/>
-
-    </LinearLayout>
--->
-    <EditText
+    <TextView
         android:hint="@string/express_company"
-        android:text="yd"
+
         android:id="@+id/et_company"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <Spinner
+        android:id="@+id/sp_company"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/courier_spinner"
+        android:background="@drawable/courier_background">
+
+    </Spinner>
+
     <EditText
         android:hint="@string/express_sno"
-        android:text="3907086973673"
+        android:text="75143671163999"
         android:id="@+id/et_sno"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

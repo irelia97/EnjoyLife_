@@ -37,12 +37,16 @@ import android.widget.Toast;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.DownloadFileListener;
+import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -56,6 +60,8 @@ import snowdance.example.com.myapplication.utils.SharedUtils;
 import snowdance.example.com.myapplication.utils.StaticClass;
 //import snowdance.example.com.myapplication.utils.UriToPathUtil;
 //import snowdance.example.com.myapplication.utils.UtilFile;
+import snowdance.example.com.myapplication.utils.UriToPathUtil;
+import snowdance.example.com.myapplication.utils.UtilFile;
 import snowdance.example.com.myapplication.utils.UtilTools;
 import snowdance.example.com.myapplication.view.CustomDialog;
 
@@ -90,6 +96,8 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     private Button bt_take_photo;
     private Button bt_select_photo;
     private Button bt_cancel;
+    //  用户
+    private MyUser userInfo;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater
@@ -125,7 +133,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         setEnabled(false);
 
         //  获取当前用户属性
-        MyUser userInfo = BmobUser.getCurrentUser(MyUser.class);
+        userInfo = BmobUser.getCurrentUser(MyUser.class);
         et_username.setText(userInfo.getNickname());
         et_gender.setText(userInfo.getSex() ?
                 this.getString(R.string.boy):this.getString(R.string.girl));
@@ -135,6 +143,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         //  忘记密码
         tv_forget = view.findViewById(R.id.tv_forget);
         tv_forget.setOnClickListener(this);
+//        UtilTools.setFont(getContext(), tv_forget, "fonts/simkai.ttf");
 
         //  确认修改按钮
         bt_confirm_modify = view.findViewById(R.id.bt_confirm_modify);
@@ -150,9 +159,47 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         bt_exit_login.setOnClickListener(this);
 
         //  设置头像
-        //  从ShareUtils中获取
-        UtilTools.setImageFromShare(getActivity(), circleImageView);
+        //  原来从ShareUtils中获取
+        //String tel = userInfo.getTelephone();
+        //UtilTools.setImageFromShare(getActivity(), circleImageView, tel);
+        downAndSetImage();
     }
+
+    private void downAndSetImage(){
+        BmobQuery<MyUser> query = new BmobQuery<>();
+        query.getObject(userInfo.getObjectId(), new QueryListener<MyUser>() {
+            @Override
+            public void done(MyUser myUser, BmobException e) {
+                if( e == null )
+                    download(myUser.getImg());
+            }
+
+        });
+    }
+
+    private void download(final BmobFile img) {
+        img.download(new DownloadFileListener() {
+            @Override
+            public void done(String path, BmobException e) {
+                if( e == null ) {
+                    MLog.d(path);
+                    try {
+                        FileInputStream inputStream = new FileInputStream(path);
+                        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                        circleImageView.setImageBitmap(bitmap);
+                    } catch (FileNotFoundException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onProgress(Integer integer, long l) {
+
+            }
+        });
+    }
+
 
     //  控制是否能够修改资料
     private void setEnabled(boolean tag){
@@ -180,10 +227,13 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.bt_select_photo:
                 //  相册选择
-                if( ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                if( ContextCompat.checkSelfPermission(getActivity(),
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED){
+                    MLog.d("相册if路线");
                     ActivityCompat.requestPermissions(getActivity(),
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            1);
                 }else{
                     toPicture();
                 }
@@ -228,6 +278,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                     !UtilTools.isEquals(gender, this.getString(R.string.girl)) ){
                     showSth(this.getString(R.string.error_gender));
                     et_gender.setText(R.string.ladyboy);
+                    break;
                 }
 
                 String desc = et_desc.getText().toString().trim();
@@ -283,31 +334,38 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     private void toPicture() {
         Intent intent = new Intent("android.intent.action.GET_CONTENT");
         intent.setType(StaticClass.SET_TYPE);
+        MLog.d("准备从相册返回！");
         startActivityForResult(intent, StaticClass.IMAGE_REQUEST_CODE);
     }
 
     //跳转相机
     private void toCamera() {
+        MLog.d("从相机中拍照");
         String status = Environment.getExternalStorageState();
         //  判断有无SD卡
         if(status.equals(Environment.MEDIA_MOUNTED)){
+            //  创建文件
             File outputImage = new File(getActivity().getExternalCacheDir(),
                     "out_image.jpg");
             try {
+                //  若文件已存在，删除
                 if (outputImage.exists()) {
                     outputImage.delete();
                 }
                 outputImage.createNewFile();
+                //  根据SDK版本不同调用不同方法获得URI
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    //添加这一句表示对目标应用临时授权该Uri所代表的文件
                     image_Uri = FileProvider.getUriForFile(getActivity(),
                             StaticClass.AUTHORITIES, outputImage);
-                } else {
+                }else{
                     image_Uri = Uri.fromFile(outputImage);
                 }
+                //  进入相机活动
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 intent.putExtra(MediaStore.Images.Media.ORIENTATION, 0);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, image_Uri);
+                MLog.d("准备从相机返回！");
+                //  回调方法
                 startActivityForResult(intent, StaticClass.CAMERA_REQUEST_CODE);
             }catch (IOException e){
                 e.printStackTrace();
@@ -321,7 +379,8 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != getActivity().RESULT_CANCELED) {
+        MLog.d("准备剪切图片！");
+        if (resultCode != 0) {
             switch (requestCode) {
                 //相册数据
                 case StaticClass.IMAGE_REQUEST_CODE:
@@ -341,7 +400,8 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                     try {
                         MLog.d("准备获取bitmap!");
                         bitmap = BitmapFactory.decodeStream(
-                                getActivity().getContentResolver().openInputStream(cropImageUri));
+                                getActivity().getContentResolver()
+                                        .openInputStream(cropImageUri));
                         MLog.d("获取成功!准备设置头像");
                         setImageToView(bitmap);
                     } catch (FileNotFoundException e) {
@@ -396,6 +456,27 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
             MLog.d("uri == null !");
             return;
         }
+        String imgPath = UriToPathUtil.getImageAbsolutePath(getContext(), uri);
+        final BmobFile file = new BmobFile(new File(imgPath));
+        file.upload(new UploadFileListener() {
+            @Override
+            public void done(BmobException e) {
+                if( e == null ){
+                    MyUser user = new MyUser(userInfo.getObjectId());
+                    user.setImg(file);
+                    user.update(new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            if( e == null )
+                                MLog.d("头像文件上传成功！");
+                            else
+                                MLog.d("头像文件上传失败！");
+                        }
+                    });
+                }
+            }
+        });
+
         File CropPhoto = new File(getActivity().getExternalCacheDir(),"crop_image.jpg");
         try{
             if(CropPhoto.exists()){
@@ -410,18 +491,21 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri, StaticClass.SET_TYPE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); //添加这一句表示对目标应用临时授权该Uri所代表的文件
+            //添加这一句表示对目标应用临时授权该Uri所代表的文件
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
         // 下面这个crop=true是设置在开启的Intent中设置显示的VIEW可裁剪
         intent.putExtra("crop", "true");
         intent.putExtra("scale", true);
-
+        //  长宽比
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
-
+        //  分辨率
         intent.putExtra("outputX", 320);
         intent.putExtra("outputY", 320);
-
+        //  true返回bitmap，若图片太大可能崩溃，且小米系统必然崩溃
+        //  我的手机就是红米5 PLUS，坑死了
+        //  false返回uri
         intent.putExtra("return-data", false);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, cropImageUri);
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
@@ -446,8 +530,10 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onDestroy() {
+        //  存储至SharedPreferences
+        //String tel = userInfo.getTelephone();
+        //UtilTools.putImageToShare(getActivity(), bitmap, tel);
         super.onDestroy();
-        UtilTools.putImageToShare(getActivity(), bitmap);
     }
 }
 

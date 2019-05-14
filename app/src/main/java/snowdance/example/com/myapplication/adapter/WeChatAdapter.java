@@ -1,6 +1,7 @@
 package snowdance.example.com.myapplication.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -13,9 +14,6 @@ import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
-
 import java.util.List;
 
 import snowdance.example.com.myapplication.R;
@@ -80,7 +78,7 @@ public class WeChatAdapter extends BaseAdapter {
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = inflater.inflate(R.layout.wechat_item, null);
-            viewHolder.iv_img = convertView.findViewById(R.id.iv_img);
+            viewHolder.dv_img = convertView.findViewById(R.id.dv_img);
             viewHolder.tv_title = convertView.findViewById(R.id.tv_title);
             viewHolder.tv_source = convertView.findViewById(R.id.tv_source);
             convertView.setTag(viewHolder);
@@ -92,18 +90,23 @@ public class WeChatAdapter extends BaseAdapter {
         viewHolder.tv_title.setText(data.getTitle());
         viewHolder.tv_source.setText(data.getSource());
 
+        MLog.i("Set title and Source!");
+
         //  当前聚合接口暂不支持封面图片
         //  若图片Url非空，则加载
-        if(!TextUtils.isEmpty(data.getImgUrl())){
-            //加载图片
-            PicassoUtils.loadImgView(mContext, data.getImgUrl(), viewHolder.iv_img,
-                    width/3, 250);
+        if(!TextUtils.isEmpty(data.getImgUrl())) {
+//            加载图片
+            PicassoUtils.loadImgView(mContext, data.getImgUrl(),
+                    viewHolder.dv_img, width / 3, 250);
+            //  Picasso第一次加载网络图片时，缓存被gc回收
+            //  无法解决该问题，更换Fresco、Glide亦无效
+            MLog.i("Set image!");
         }
         return convertView;
     }
 
     class ViewHolder {
-        private ImageView iv_img;
+        private ImageView dv_img;
         private TextView  tv_title;
         private TextView  tv_source;
     }

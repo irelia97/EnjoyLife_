@@ -1,13 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="spinner">
+    <string-array name="courier_spinner">
         <item>顺丰</item>
         <item>圆通</item>
         <item>中通</item>
         <item>韵达</item>
         <item>申通</item>
-        <item>天天</item>
+        <item>京东</item>
         <item>全峰</item>
         <item>EMS</item>
+        <item>EMS国际</item>
+        <item>德邦</item>
+        <item>国通</item>
+        <item>如风达</item>
+        <item>天天</item>
+        <item>宅急送</item>
+        <item>汇通</item>
+        <item>Fedex国际</item>
+        <item>Fedex国内</item>
+        <item>邮政国内(挂号信)</item>
+        <item>UPS国际快递</item>
+        <item>中铁</item>
+        <item>佳吉</item>
+        <item>速尔</item>
+        <item>信丰</item>
+        <item>优速</item>
+        <item>中邮</item>
+        <item>天地华宇</item>
+        <item>安信达</item>
+        <item>快捷速递</item>
+        <item>AAE全球专递</item>
+        <item>DHL</item>
+        <item>DPEX国际快递</item>
+        <item>D速物流</item>
+        <item>OCS</item>
+        <item>TNT</item>
+        <item>东方</item>
+        <item>传喜</item>
+        <item>城市100</item>
+        <item>城市之星</item>
+        <item>安捷</item>
+        <item>百福东方</item>
+        <item>程光</item>
+        <item>递四方</item>
+        <item>长通</item>
+        <item>飞豹</item>
+        <item>马来西亚(大包EMS)</item>
+        <item>安能</item>
+        <item>中通快运</item>
+        <item>远成物流</item>
+        <item>远成快运</item>
+        <item>邮政快递</item>
+        <item>百世快运</item>
+        <item>苏宁快递</item>
+        <item>安能物流</item>
+        <item>九曳</item>
+    </string-array>
+
+    <string-array name="newsType_spinner">
+        <item>不限类型</item>
+        <item>国内焦点</item>
+        <item>国际焦点</item>
+        <item>军事焦点</item>
+        <item>财经焦点</item>
+        <item>互联网焦点</item>
+        <item>房产焦点</item>
+        <item>汽车焦点</item>
+        <item>体育焦点</item>
+        <item>娱乐焦点</item>
+        <item>游戏焦点</item>
+        <item>教育焦点</item>
+        <item>女人焦点</item>
+        <item>科技焦点</item>
+        <item>社会焦点</item>
+        <item>国内最新</item>
+        <item>台湾最新</item>
+        <item>港澳最新</item>
+        <item>国际最新</item>
+        <item>军事最新</item>
+        <item>财经最新</item>
+        <item>理财最新</item>
+        <item>宏观经济最新</item>
+        <item>互联网最新</item>
+        <item>房产最新</item>
+        <item>汽车最新</item>
+        <item>体育最新</item>
+        <item>国际足球最新</item>
+        <item>国内足球最新</item>
+        <item>CBA最新</item>
+        <item>综合体育最新</item>
+        <item>娱乐最新</item>
+        <item>电影最新</item>
+        <item>电视最新</item>
+        <item>游戏最新</item>
+        <item>教育最新</item>
+        <item>女人最新</item>
+        <item>美容护肤最新</item>
+        <item>情感两性最新</item>
+        <item>健康养生最新</item>
+        <item>科技最新</item>
+        <item>数码最新</item>
+        <item>电脑最新</item>
+        <item>科普最新</item>
+        <item>社会最新</item>
+        <item>旅游最新</item>
+        <item>电商最新</item>
+        <item>物流最新</item>
+        <item>创业最新</item>
     </string-array>
 </resources>

@@ -1,6 +1,7 @@
 package snowdance.example.com.myapplication.entity;
 
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobFile;
 
 /**
  * Project Name : EnjoyLife
@@ -17,7 +18,31 @@ public class MyUser extends BmobUser {
     private String telephone;
     private String description;
     private String nickname;
+    private BmobFile img;
 
+    public MyUser(){
+
+    }
+
+    public MyUser(BmobFile file){
+        img = file;
+    }
+
+    public MyUser(String objId){
+        setObjectId(objId);
+    }
+
+    public BmobFile getImg() {
+        return img;
+    }
+
+    public void setImg(BmobFile img) {
+        this.img = img;
+    }
+
+    public boolean isSex() {
+        return sex;
+    }
 
     public int getAge() {
         return age;

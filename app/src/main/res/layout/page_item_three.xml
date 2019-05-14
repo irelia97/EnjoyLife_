@@ -18,9 +18,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
+            android:id="@+id/text3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Test3"
+            android:text="目不暇接的精美图片"
             android:textSize="30sp"/>
     </LinearLayout>
 

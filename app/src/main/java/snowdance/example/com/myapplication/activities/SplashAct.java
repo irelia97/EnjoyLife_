@@ -1,5 +1,6 @@
 package snowdance.example.com.myapplication.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -36,6 +37,8 @@ public class SplashAct extends AppCompatActivity {
      */
 
     private TextView tv_splash;
+
+    @SuppressLint("HandlerLeak")
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -73,7 +76,8 @@ public class SplashAct extends AppCompatActivity {
 
     private boolean isFirst(){
         //  第一次进入时，SharedUtils为空，tag读取到默认值true
-        boolean tag = SharedUtils.getBoolean(this, StaticClass.ISFIRST, true);
+        boolean tag = SharedUtils.getBoolean(this, StaticClass.ISFIRST,
+                true);
         if( tag ){
             //  之后将StaticClass.ISFIRST作为key存储进去，value存储是false
             //  这样之后运行时tag取到的就是false了

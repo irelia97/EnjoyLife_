@@ -12,6 +12,7 @@ import java.util.List;
 
 import snowdance.example.com.myapplication.R;
 import snowdance.example.com.myapplication.entity.CourierData;
+import snowdance.example.com.myapplication.utils.UtilTools;
 
 //  快递信息
 public class CourierAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -35,19 +36,19 @@ public class CourierAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         ViewHolder itemHolder = (ViewHolder) holder;
         if (getItemViewType(position) == TYPE_TOP) {
             // 第一行头的竖线不显示
-            itemHolder.tvTopLine.setVisibility(View.INVISIBLE);
+            itemHolder.tv_topLine.setVisibility(View.INVISIBLE);
             itemHolder.tv_datetime.setTextColor(0xff555555);
             itemHolder.tv_zone.setTextColor(0xff555555);
             itemHolder.tv_remark.setTextColor(0xff555555);
             // 字体颜色加深
-            itemHolder.tvDot.setBackgroundResource(R.drawable.timelline_dot_first);
+            itemHolder.tv_dot.setBackgroundResource(R.drawable.timelline_dot_first);
         } else if (getItemViewType(position) == TYPE_NORMAL) {
-            itemHolder.tvTopLine.setVisibility(View.VISIBLE);
-            itemHolder.tvTopLine.setVisibility(View.INVISIBLE);
+            itemHolder.tv_topLine.setVisibility(View.VISIBLE);
+            itemHolder.tv_topLine.setVisibility(View.INVISIBLE);
             itemHolder.tv_datetime.setTextColor(0xff999999);
             itemHolder.tv_zone.setTextColor(0xff999999);
             itemHolder.tv_remark.setTextColor(0xff999999);
-            itemHolder.tvDot.setBackgroundResource(R.drawable.timelline_dot_normal);
+            itemHolder.tv_dot.setBackgroundResource(R.drawable.timelline_dot_normal);
         }
 
         itemHolder.bindHolder(traceList.get(position));
@@ -68,14 +69,14 @@ public class CourierAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tv_datetime, tv_remark, tv_zone;
-        private TextView tvTopLine, tvDot;
+        private TextView tv_topLine, tv_dot;
         public ViewHolder(View itemView) {
             super(itemView);
             tv_remark = itemView.findViewById(R.id.tv_remark);
             tv_zone = itemView.findViewById(R.id.tv_zone);
             tv_datetime = itemView.findViewById(R.id.tv_datetime);
-            tvTopLine = itemView.findViewById(R.id.tvTopLine);
-            tvDot = itemView.findViewById(R.id.tvDot);
+            tv_topLine = itemView.findViewById(R.id.tvTopLine);
+            tv_dot = itemView.findViewById(R.id.tvDot);
         }
 
         public void bindHolder(CourierData data) {

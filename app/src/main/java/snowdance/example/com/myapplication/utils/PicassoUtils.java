@@ -2,10 +2,18 @@ package snowdance.example.com.myapplication.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.squareup.picasso.Transformation;
+
+import java.io.IOException;
+import java.util.logging.Handler;
 
 /**
  * Project Name : EnjoyLife
@@ -20,24 +28,26 @@ public class PicassoUtils {
 
     //  原尺寸加载图片
     public static void loadImgView(Context mContext, String url, ImageView imageView){
-        Picasso.with(mContext).load(url).into(imageView);
+        Picasso.get().load(url).into(imageView);
     }
 
     //  指定大小加载图片
     public static void loadImgView(Context mContext, String url, ImageView imageView,
                                    int width, int height){
-        Picasso.with(mContext).load(url).resize(width, height).centerCrop().into(imageView);
+        Picasso.get().load(url).resize(width, height)
+                //.memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE)
+                .config(Bitmap.Config.RGB_565).centerCrop().noFade().into(imageView);
     }
 
     //  默认图片、错误图片的加载
     public static void loadImgViewHolder(Context mContext, String url, ImageView imageView,
                                          int unloadImg, int errorImg){
-        Picasso.with(mContext).load(url).placeholder(unloadImg).error(errorImg).into(imageView);
+        Picasso.get().load(url).placeholder(unloadImg).error(errorImg).into(imageView);
     }
 
     //  裁剪方法
     public static void loadImgViewCrop(Context mContext, String url, ImageView imageView){
-        Picasso.with(mContext).load(url).transform(new CropSquareTransformation()).into(imageView);
+        Picasso.get().load(url).transform(new CropSquareTransformation()).into(imageView);
     }
 
 

@@ -84,6 +84,7 @@ public class LoginAct extends AppCompatActivity implements View.OnClickListener 
         //  忘记密码
         tv_forget = findViewById(R.id.tv_forget);
         tv_forget.setOnClickListener(this);
+//        UtilTools.setFont(this, tv_forget, "fonts/simkai.ttf");
 
         //  登录进度提示框
         dialog = new CustomDialog(this, 300, 300,
@@ -149,7 +150,6 @@ public class LoginAct extends AppCompatActivity implements View.OnClickListener 
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         SharedUtils.putBoolean(this, "remember_password"
                 , remember_password.isChecked());
         //  记住密码
@@ -162,5 +162,6 @@ public class LoginAct extends AppCompatActivity implements View.OnClickListener 
             SharedUtils.delShare(this, "username");
             SharedUtils.delShare(this, "password");
         }
+        super.onDestroy();
     }
 }

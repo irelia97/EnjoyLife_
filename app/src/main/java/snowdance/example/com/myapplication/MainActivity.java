@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -32,6 +33,7 @@ import snowdance.example.com.myapplication.fragment.PersonFragment;
 import snowdance.example.com.myapplication.fragment.WechatFragment;
 import snowdance.example.com.myapplication.utils.MLog;
 import snowdance.example.com.myapplication.utils.SharedUtils;
+import snowdance.example.com.myapplication.utils.StaticClass;
 import snowdance.example.com.myapplication.utils.UtilTools;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -46,6 +48,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private List<Fragment> mFragment;
     //  Float Button
     private FloatingActionButton mFabSetting;
+
+    private ManagerFragment managerFragment;
+    private WechatFragment  wechatFragment;
+    private BeautyFragment  beautyFragment;
+    private PersonFragment  personFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,12 +71,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         MLog.DEBUG = true;
-        SharedUtils.putString(this, "lyy", "LiuYongYang");
-        String name, def = "Not found";
-        name = SharedUtils.getString(this, "asd", def);
-        MLog.d(name);
-        name = SharedUtils.getString(this, "lyy", def);
-        MLog.d(name);
+//        SharedUtils.putString(this, "lyy", "LiuYongYang");
+//        String name, def = "Not found";
+//        name = SharedUtils.getString(this, "asd", def);
+//        MLog.d(name);
+//        name = SharedUtils.getString(this, "lyy", def);
+//        MLog.d(name);
 
 //        CrashReport.testJavaCrash();
     }
@@ -84,11 +91,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mTitle.add( this.getString(R.string.person_info) );
 
         //  顺序添加Fragment
+        managerFragment = new ManagerFragment();
+        wechatFragment  = new WechatFragment();
+        beautyFragment  = new BeautyFragment();
+        personFragment  = new PersonFragment();
         mFragment = new ArrayList<>();
-        mFragment.add( new ManagerFragment() );
-        mFragment.add( new WechatFragment() );
-        mFragment.add( new BeautyFragment() );
-        mFragment.add( new PersonFragment() );
+        mFragment.add( managerFragment );
+        mFragment.add( wechatFragment );
+        mFragment.add( beautyFragment );
+        mFragment.add( personFragment );
     }
     //  Init View
     private void initView() {
@@ -114,6 +125,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mFabSetting.setVisibility(View.GONE);
                 }else{
                     mFabSetting.setVisibility(View.VISIBLE);
+                }
+
+                if( i == 1 ){
+                    UtilTools.showSth(MainActivity.this, "Tips:微信文章下拉可刷新");
+                }else if( i == 2 ){
+                    UtilTools.showSth(MainActivity.this, "Tips:精选图片上滑可刷新");
                 }
             }
 
@@ -149,7 +166,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.mFab_Setting:
-                startActivity(new Intent(this, SettingAct.class));
+                startActivityForResult(new Intent(this, SettingAct.class), 123);
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        //  必须使用super调用父类方法，否则fragment中的onActivityResult
+        //  会调用此活动中的ActivityResult回调方法
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case 123:
+                if( resultCode == RESULT_OK ){
+                    MLog.d("------Return to MainFunction------");
+                    MLog.d("Group = " + StaticClass.GROUP + ", Child = " + StaticClass.CHILD);
+                    UtilTools.showSth(this, "Group = " + StaticClass.GROUP + ", Child = " + StaticClass.CHILD);
+                }
+                //  若检测到图片内容选项改变，在这里拿到fragment的引用
+                //  调用fragment内的public方法去刷新界面
+                beautyFragment.changeImageType();
+                wechatFragment.changeNewsType();
+
+                break;
+            default:
                 break;
         }
     }
@@ -170,9 +210,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return super.onTouchEvent(event);
     }
 
-    //
-//    @Override
-//    public void onConfigurationChanged(Configuration newConfig) {
-//        super.onConfigurationChanged(newConfig);
-//    }
+    private long exitTime = 0;
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
+            //弹出提示，可以有多种方式
+                UtilTools.showSth(this, "再按一次退出程序");
+                exitTime = System.currentTimeMillis();
+            } else {
+                finish();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }

@@ -1,16 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center">
+    android:layout_height="match_parent">
 
-    <TextView
+    <ImageView
+        android:src="@drawable/setting"
+        android:background="#ffffffff"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/setting"
-        android:textSize="30sp" />
+        android:orientation="vertical"
+        android:padding="10dp">
 
-</LinearLayout>
+        <Button
+            android:layout_marginTop="200dp"
+            android:id="@+id/news_Setting"
+            android:text="新闻设置"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_background"
+            android:textColor="@android:color/white"/>
+
+        <Button
+            android:layout_marginTop="10dp"
+            android:id="@+id/photo_Setting"
+            android:text="图片设置"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_background"
+            android:textColor="@android:color/white"/>
+
+        <Button
+            android:layout_marginTop="10dp"
+            android:id="@+id/else_Setting"
+            android:text="@string/else_setting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_background"
+            android:textColor="@android:color/white"/>
+
+    </LinearLayout>
+
+
+
+</android.support.constraint.ConstraintLayout>

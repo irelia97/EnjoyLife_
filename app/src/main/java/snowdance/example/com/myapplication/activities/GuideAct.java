@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
 import snowdance.example.com.myapplication.MainActivity;
 import snowdance.example.com.myapplication.R;
 import snowdance.example.com.myapplication.utils.MLog;
+import snowdance.example.com.myapplication.utils.UtilTools;
 
 /**
  * Project Name : EnjoyLife
@@ -37,6 +39,8 @@ public class GuideAct extends AppCompatActivity implements View.OnClickListener 
     private ImageView p1, p2, p3;
     //  跳过
     private ImageView skip;
+    //  文本
+    private TextView tv;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,6 +67,14 @@ public class GuideAct extends AppCompatActivity implements View.OnClickListener 
         p3 = findViewById(R.id.point3);
         //  默认选中第一个
         setPointImage(true, false, false);
+
+        //  为文本设置字体
+        tv = findViewById(R.id.text1);
+        UtilTools.setFont(this, tv, "fonts/simkai.ttf");
+        tv = findViewById(R.id.text2);
+        UtilTools.setFont(this, tv, "fonts/simkai.ttf");
+        tv = findViewById(R.id.text3);
+        UtilTools.setFont(this, tv, "fonts/simkai.ttf");
 
         //  跳过图片ImageView
         skip = findViewById(R.id.skip);
@@ -113,7 +125,7 @@ public class GuideAct extends AppCompatActivity implements View.OnClickListener 
         switch (v.getId()){
             //  跳过、进入，均为进入主页事件
             case R.id.skip:
-                ;
+
             case R.id.goto_main:
                 startActivity(new Intent(this, LoginAct.class));
                 finish();
@@ -149,7 +161,8 @@ public class GuideAct extends AppCompatActivity implements View.OnClickListener 
         }
     }
 
-    private void setPointImage(boolean isCheck1, boolean isCheck2, boolean isCheck3){
+    private void setPointImage(boolean isCheck1, boolean isCheck2,
+                               boolean isCheck3){
         if( isCheck1 ){
             p1.setBackgroundResource(R.drawable.green_point);
         }else{

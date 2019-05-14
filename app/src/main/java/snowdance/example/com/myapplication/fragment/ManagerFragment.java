@@ -3,6 +3,7 @@ package snowdance.example.com.myapplication.fragment;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.speech.SpeechRecognizer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechError;
+import com.iflytek.cloud.SpeechSynthesizer;
+import com.iflytek.cloud.SynthesizerListener;
 import com.kymjs.rxvolley.RxVolley;
 import com.kymjs.rxvolley.client.HttpCallback;
 import com.kymjs.rxvolley.http.VolleyError;
@@ -36,6 +41,7 @@ import snowdance.example.com.myapplication.R;
 import snowdance.example.com.myapplication.adapter.MsgAdapter;
 import snowdance.example.com.myapplication.entity.Message;
 import snowdance.example.com.myapplication.utils.MLog;
+import snowdance.example.com.myapplication.utils.SharedUtils;
 import snowdance.example.com.myapplication.utils.StaticClass;
 import snowdance.example.com.myapplication.utils.UtilTools;
 
@@ -55,9 +61,7 @@ public class ManagerFragment extends Fragment {
     private Button send;
     private RecyclerView msgRecyclerView;
     private MsgAdapter adapter;
-//    private Random rand;
-//    private String[] data = {"今天天气不错啊！", "嗯", "不知道", "你说神马？", "我是机器人啊!"
-//            ,"我听不懂你在说什么", "还行吧", "我还没吃饭呢！你呢？", "好吧", "行"};
+    private SpeechSynthesizer mTts;
 
     private LinearLayout linearLayout;
     @Override
@@ -96,7 +100,7 @@ public class ManagerFragment extends Fragment {
                     //  清空输入框
                     inputText.setText("");
 
-                    //  Error code 302解决方案，但是好像没有用
+                    //  Error code 302重定向解决方案，但是好像没有用
                     BasicHttpParams params = new BasicHttpParams();
                     HttpClientParams.setRedirecting(params, true);
                     //  因此更换了茉莉机器人API
@@ -111,7 +115,6 @@ public class ManagerFragment extends Fragment {
                             switch (content){
                                 case "cls":
                                     msgList.clear();
-
                                     //  清屏后收起键盘，否则清屏效果不会出现(不知道为什么)
                                     UtilTools.hideKeyBoard(view);
                                     msgList.add(new Message(StaticClass.ROBOT_CLS,
@@ -134,6 +137,14 @@ public class ManagerFragment extends Fragment {
                                     Parse_CaiShen(t);
                                     break;
                                 default:
+                                    //  TTS，若语音功能开启
+                                    //  开始合成语音
+                                    boolean TTS_state = SharedUtils.getBoolean(getActivity(),
+                                            "TTS", false);
+                                    if( TTS_state ){
+                                        TTS_Speak(t);
+                                    }
+                                    //  将文本添加进左边
                                     Parse_Text(t);
                                     break;
                             }
@@ -170,7 +181,8 @@ public class ManagerFragment extends Fragment {
     }
 
     private void initView(View view) {
-//        rand = new Random();
+        initXunFei();
+
         linearLayout = view.findViewById(R.id.root);
         inputText = view.findViewById(R.id.input_text);
         inputText.setFocusable(true);
@@ -183,7 +195,17 @@ public class ManagerFragment extends Fragment {
         msgRecyclerView.setAdapter(adapter);
     }
 
+    private void initXunFei(){
+        //  初始化
+        mTts = SpeechSynthesizer.createSynthesizer(getActivity(), null);
+        mTts.setParameter(SpeechConstant.VOICE_NAME, "x_yaoyao");   //发音人
+        mTts.setParameter(SpeechConstant.SPEED, "50");  //  语速
+        mTts.setParameter(SpeechConstant.VOLUME, "80"); //  音量
+        mTts.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_CLOUD);   //云端调用
+    }
+
     private void initMsg(){
+        //  初始化欢迎语
         Message msg1 = new Message(StaticClass.ROBOT_WELCOME, Message.TYPE_RECEIVED);
         msgList.add(msg1);
         Message msg2 = new Message(StaticClass.ROBOT_TOAST, Message.TYPE_RECEIVED);
@@ -279,6 +301,49 @@ public class ManagerFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
+    //  合成语音
+    private void TTS_Speak(String text){
+        mTts.startSpeaking(text, mSynListener);
+    }
+
+    //  合成监听器
+    private SynthesizerListener mSynListener = new SynthesizerListener() {
+        @Override
+        public void onSpeakBegin() {
+
+        }
+
+        @Override
+        public void onBufferProgress(int i, int i1, int i2, String s) {
+
+        }
+
+        @Override
+        public void onSpeakPaused() {
+
+        }
+
+        @Override
+        public void onSpeakResumed() {
+
+        }
+
+        @Override
+        public void onSpeakProgress(int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onCompleted(SpeechError speechError) {
+            //结束时回调，无错误则speechError为null
+        }
+
+        @Override
+        public void onEvent(int i, int i1, int i2, Bundle bundle) {
+
+        }
+    };
 
     //  这个方法会使控件超出边界，弃用
     private void controlKeyboardLayout(final View root, final View scrollToView){

@@ -5,9 +5,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kymjs.rxvolley.RxVolley;
@@ -19,7 +22,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import snowdance.example.com.myapplication.R;
 import snowdance.example.com.myapplication.adapter.CourierAdapter;
@@ -39,7 +44,11 @@ import snowdance.example.com.myapplication.utils.UtilTools;
 
 public class CourierAct extends BaseAct implements View.OnClickListener {
 
-    private EditText et_company;
+    private TextView tv_company;
+    private Spinner  sp_company;
+    private String   company_no = "zto";
+    private Map<String, String> map = new HashMap<String, String>();
+
     private EditText et_sno;
     private Button bt_search;
 
@@ -52,16 +61,85 @@ public class CourierAct extends BaseAct implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_courier);
 
-        initView();
+        initData();
+        sp_company.setSelection(2);
+        sp_company.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String company_name = (String)sp_company.getItemAtPosition(position);
+                company_no = map.get(company_name);
+                UtilTools.showSth(CourierAct.this, company_no);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
-    private void initView() {
+    private void initData() {
         rv_Trace = findViewById(R.id.rvTrace);
-
-        et_company = findViewById(R.id.et_company);
+        tv_company = findViewById(R.id.et_company);
+        sp_company = findViewById(R.id.sp_company);
         et_sno = findViewById(R.id.et_sno);
         bt_search = findViewById(R.id.bt_search);
         bt_search.setOnClickListener(this);
+
+        map.put("顺丰", "sf");
+        map.put("申通", "sto");
+        map.put("圆通", "yt");
+        map.put("韵达", "yd");
+        map.put("京东", "jd");
+        map.put("天天", "tt");
+        map.put("EMS", "ems");
+        map.put("中通", "zto");
+        map.put("汇通", "ht");
+        map.put("全峰", "qf");
+        map.put("德邦", "db");
+        map.put("国通", "gt");
+        map.put("如风达", "rfd");
+        map.put("宅急送", "zjs");
+        map.put("EMS国际", "emsg");
+        map.put("Fedex国际", "fedex");
+        map.put("邮政国内(挂号信)", "yzgn");
+        map.put("UPS国际快递", "ups");
+        map.put("中铁", "ztky");
+        map.put("佳吉", "jiaji");
+        map.put("速尔", "suer");
+        map.put("信丰", "xfwl");
+        map.put("优速", "yousu");
+        map.put("中邮", "zhongyu");
+        map.put("天地华宇", "tdhy");
+        map.put("安信达", "axd");
+        map.put("快捷速递", "kuaijie");
+        map.put("AAE全球专递", "aae");
+        map.put("DHL", "dhl");
+        map.put("DPEX国际快递", "dpex");
+        map.put("D速物流", "ds");
+        map.put("FEDEX国内", "fedexcn");
+        map.put("OCS", "ocs");
+        map.put("TNT", "tnt");
+        map.put("东方", "coe");
+        map.put("传喜", "cxwl");
+        map.put("城市100", "cs");
+        map.put("城市之星", "cszx");
+        map.put("安捷", "aj");
+        map.put("百福东方", "bfdf");
+        map.put("程光", "chengguang");
+        map.put("递四方", "dsf");
+        map.put("长通", "ctwl");
+        map.put("飞豹", "feibao");
+        map.put("马来西亚(大包EMS)", "malaysiaems");
+        map.put("安能", "ane66");
+        map.put("中通快运", "ztoky");
+        map.put("远成物流", "ycgky");
+        map.put("远成快运", "ycky");
+        map.put("邮政快递", "youzheng");
+        map.put("百世快运", "bsky");
+        map.put("苏宁快递", "suning");
+        map.put("安能物流", "anneng");
+        map.put("九曳", "jiuye");
     }
 
     @Override
@@ -69,11 +147,11 @@ public class CourierAct extends BaseAct implements View.OnClickListener {
         switch (v.getId()){
             case R.id.bt_search:
                 //  获取输入框的数据
-                String name = et_company.getText().toString().trim();
+
                 String sno  = et_sno.getText().toString().trim();
                 String url  = "http://v.juhe.cn/exp/index?key=" + StaticClass.Express_APPKEY
-                        + "&com=" + name + "&no=" + sno;
-                if( UtilTools.isEmpty(name) || UtilTools.isEmpty(sno) ){
+                        + "&com=" + company_no + "&no=" + sno;
+                if( UtilTools.isEmpty(company_no) || UtilTools.isEmpty(sno) ){
                     UtilTools.showSth(this, this.getString(R.string.textnull));
                     break;
                 }
@@ -86,10 +164,10 @@ public class CourierAct extends BaseAct implements View.OnClickListener {
                         parseJSON(t);
                     }
 
-//                    @Override
-//                    public void onFailure(VolleyError error) {
-//                        super.onFailure(error);
-//                    }
+                    @Override
+                    public void onFailure(VolleyError error) {
+
+                    }
                 });
 
                 break;
@@ -99,6 +177,8 @@ public class CourierAct extends BaseAct implements View.OnClickListener {
     private void parseJSON(String t){
         try {
             JSONObject jsonObject = new JSONObject(t);
+            String reason = jsonObject.getString("reason");
+            UtilTools.showSth(this, reason);
             //  拿到返回结果
             JSONObject res = jsonObject.getJSONObject("result");
             //  获取List及其中每一个Item
